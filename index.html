@@ -160,40 +160,35 @@ h1{font-family:'Lora',serif;font-weight:700;line-height:1.08;color:var(--ink);
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .footnote{text-align:center;color:var(--muted);font-size:.8rem;margin-top:18px;line-height:1.5}
 
-/* ===== welcome — editorial hero ===== */
-.welcome{isolation:isolate;padding-top:clamp(36px,10vw,68px);padding-bottom:clamp(30px,7vw,52px)}
-.welcome>*{position:relative;z-index:2}
-.welcome .aurora{position:absolute;inset:-12%;z-index:0;pointer-events:none;overflow:hidden}
-.welcome .aurora b{position:absolute;border-radius:50%;filter:blur(62px);opacity:.30;will-change:transform}
-.welcome .aurora .b1{width:260px;height:260px;background:var(--neh);left:-10%;top:-4%;animation:drift1 17s ease-in-out infinite}
-.welcome .aurora .b2{width:240px;height:240px;background:var(--mary);right:-10%;top:2%;animation:drift2 19s ease-in-out infinite}
-.welcome .aurora .b3{width:230px;height:230px;background:var(--mar);left:22%;top:46%;animation:drift3 15s ease-in-out infinite}
-.welcome .aurora .b4{width:210px;height:210px;background:var(--bar);right:12%;top:58%;animation:drift1 21s ease-in-out infinite reverse}
-@keyframes drift1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(26px,18px) scale(1.14)}}
-@keyframes drift2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-22px,22px) scale(1.12)}}
-@keyframes drift3{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(18px,-16px) scale(1.16)}}
-/* optional faint hero backdrop — enable by setting HERO_LANDING to a data URI */
-.welcome .bg-hero{position:absolute;inset:0;z-index:1;background-size:cover;background-position:center;opacity:.32;
-  -webkit-mask-image:radial-gradient(125% 90% at 50% 28%,#000 32%,transparent 76%);mask-image:radial-gradient(125% 90% at 50% 28%,#000 32%,transparent 76%)}
-.welcome .scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(100% 72% at 50% 24%,transparent 42%,var(--card) 94%)}
-.welcome .eyebrow{font-family:'Inter',sans-serif;font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:.68rem;color:var(--brand);opacity:.92;animation:riseIn .6s .05s both}
-.welcome h1{font-family:'Lora',serif;font-weight:700;color:var(--ink);letter-spacing:-.015em;font-size:clamp(2.8rem,12.5vw,4.1rem);line-height:1.0;margin:20px 0 0}
+/* ===== welcome — full-screen hero ===== */
+body.welcome-mode{padding:0}
+body.welcome-mode .wrap{max-width:none;width:100%;margin:0}
+body.welcome-mode .footnote{display:none}
+.panel.welcome{border-radius:0;box-shadow:none;padding:0;height:100svh;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+.panel.welcome::after{z-index:3}
+.welcome .hero-band{position:relative;flex:0 1 auto;min-height:0;width:100%;height:clamp(140px,29svh,360px);overflow:hidden}
+.welcome .hero-img{position:absolute;inset:0;background-size:cover;background-position:center 32%;animation:heroIn 1.2s cubic-bezier(.2,.8,.3,1) both}
+@keyframes heroIn{from{transform:scale(1.08);opacity:0}to{transform:scale(1);opacity:1}}
+.welcome .hero-fade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 28%,rgba(244,239,228,.35) 66%,var(--bg) 100%)}
+.welcome .w-content{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:var(--bg);padding:clamp(10px,2svh,22px) clamp(22px,7vw,44px) clamp(16px,2.6svh,34px)}
+.welcome .eyebrow{font-family:'Inter',sans-serif;font-weight:700;letter-spacing:.16em;text-transform:uppercase;font-size:clamp(.6rem,1.5svh,.7rem);color:var(--brand);opacity:.92;animation:riseIn .6s .2s both}
+.welcome h1{font-family:'Lora',serif;font-weight:700;color:var(--ink);letter-spacing:-.015em;font-size:max(2rem,min(11.5vw,6.4svh,3.8rem));line-height:1.0;margin:clamp(6px,1.4svh,16px) 0 0}
 .t-line{display:block;overflow:hidden;padding-bottom:.05em}
 .t-line>span{display:inline-block;animation:lineUp .85s cubic-bezier(.2,.85,.3,1) both}
-.t-line:nth-child(1)>span{animation-delay:.16s}
-.t-line:nth-child(2)>span{animation-delay:.28s}
-.t-line:nth-child(3)>span{animation-delay:.40s}
+.t-line:nth-child(1)>span{animation-delay:.3s}
+.t-line:nth-child(2)>span{animation-delay:.42s}
+.t-line:nth-child(3)>span{animation-delay:.54s}
 @keyframes lineUp{from{transform:translateY(115%)}to{transform:translateY(0)}}
 .emph{position:relative;color:var(--brand);white-space:nowrap}
-.emph::after{content:"";position:absolute;left:-.02em;right:-.02em;bottom:.04em;height:.085em;border-radius:99px;background:linear-gradient(90deg,var(--neh),var(--mary));transform:scaleX(1);transform-origin:left;animation:draw .8s 1.15s cubic-bezier(.2,.85,.3,1) both}
+.emph::after{content:"";position:absolute;left:-.02em;right:-.02em;bottom:.04em;height:.085em;border-radius:99px;background:linear-gradient(90deg,var(--neh),var(--mary));transform:scaleX(1);transform-origin:left;animation:draw .8s 1.3s cubic-bezier(.2,.85,.3,1) both}
 @keyframes draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-.welcome .tagline{color:#5b556e;font-size:1.08rem;line-height:1.5;margin:22px auto 0;max-width:26ch;animation:riseIn .6s .95s both}
-.welcome .styles{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-top:24px;animation:riseIn .6s 1.1s both}
-.style-chip{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-weight:600;font-size:.8rem;color:#5b556e;background:var(--card);border:1px solid var(--line);padding:7px 13px;border-radius:99px}
+.welcome .tagline{color:#5b556e;font-size:clamp(.92rem,2.1svh,1.06rem);line-height:1.45;margin:clamp(8px,1.7svh,18px) auto 0;max-width:26ch;animation:riseIn .6s 1.1s both}
+.welcome .styles{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(6px,1svh,8px);margin-top:clamp(10px,2svh,22px);animation:riseIn .6s 1.25s both}
+.style-chip{display:inline-flex;align-items:center;gap:7px;font-family:'Inter',sans-serif;font-weight:600;font-size:clamp(.74rem,1.7svh,.8rem);color:#5b556e;background:var(--card);border:1px solid var(--line);padding:clamp(5px,1svh,7px) clamp(10px,2vw,13px);border-radius:99px}
 .style-chip i{width:9px;height:9px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 16%,transparent)}
-.welcome .actions{margin-top:30px;animation:riseIn .6s 1.25s both}
-.welcome .fine{animation:riseIn .6s 1.4s both}
-.welcome .cta{position:relative;overflow:hidden;font-size:1.06rem;padding:17px 36px;border-radius:99px;background:linear-gradient(120deg,var(--brand),#6f63e0 45%,var(--mary));box-shadow:0 18px 36px -12px rgba(90,79,207,.6);animation:ctapulse 3.4s ease-in-out infinite}
+.welcome .actions{margin-top:clamp(14px,2.6svh,28px);animation:riseIn .6s 1.4s both}
+.welcome .fine{margin-top:clamp(8px,1.6svh,18px);animation:riseIn .6s 1.55s both}
+.welcome .cta{position:relative;overflow:hidden;font-size:clamp(.98rem,2svh,1.06rem);padding:clamp(13px,1.8svh,17px) clamp(28px,7vw,36px);border-radius:99px;background:linear-gradient(120deg,var(--brand),#6f63e0 45%,var(--mary));box-shadow:0 18px 36px -12px rgba(90,79,207,.6);animation:ctapulse 3.4s ease-in-out infinite}
 @keyframes ctapulse{0%,100%{box-shadow:0 16px 30px -14px rgba(90,79,207,.55)}50%{box-shadow:0 22px 46px -10px rgba(129,102,230,.55)}}
 .welcome .cta::after{content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);animation:shine 4.6s ease-in-out infinite}
 @keyframes shine{0%,55%{left:-70%}100%{left:170%}}
@@ -222,7 +217,20 @@ h1{font-family:'Lora',serif;font-weight:700;line-height:1.08;color:var(--ink);
 .qhero{width:100%;aspect-ratio:16/9;border-radius:18px;overflow:hidden;margin:2px 0 6px;
   background:var(--soft);border:1px solid var(--line);box-shadow:0 16px 32px -20px rgba(43,37,64,.55)}
 .qhero img{width:100%;height:100%;object-fit:cover;display:block}
-.welcome.has-bg .aurora{opacity:.5}
+/* ===== question screens: fit to viewport, no scroll ===== */
+body.quiz-mode{padding:0}
+body.quiz-mode .footnote{display:none}
+.panel.quiz{border-radius:0;box-shadow:none;overflow:hidden;height:100svh;display:flex;flex-direction:column;
+  padding:clamp(12px,2.6svh,24px) clamp(16px,5vw,30px) clamp(14px,2.6svh,24px)}
+.panel.quiz .topbar{flex:none;margin-bottom:clamp(6px,1.2svh,12px)}
+.panel.quiz .bar{flex:none;margin-bottom:clamp(8px,1.8svh,16px)}
+.panel.quiz .qhero{flex:0 1 auto;width:100%;aspect-ratio:16/9;max-height:clamp(108px,23svh,210px);margin:0 auto clamp(6px,1.3svh,12px)}
+.panel.quiz .qnum{flex:none}
+.panel.quiz .question{flex:none;font-size:clamp(1.05rem,3.3svh,1.5rem);line-height:1.2;margin:clamp(4px,.9svh,10px) 0 clamp(8px,1.7svh,18px)}
+.panel.quiz .opts{flex:1 1 auto;min-height:0;justify-content:center;gap:clamp(6px,1.2svh,12px)}
+.panel.quiz .opt{flex:1 1 0;min-height:0;max-height:clamp(58px,11.5svh,94px);padding:clamp(7px,1.3svh,15px) 14px}
+.panel.quiz .optk{flex:none;width:clamp(27px,4.4svh,34px);height:clamp(27px,4.4svh,34px);font-size:clamp(.8rem,1.9svh,.95rem)}
+.panel.quiz .optt{font-size:clamp(.82rem,1.9svh,1rem);line-height:1.28}
 </style>
 </head>
 <body>
@@ -334,28 +342,36 @@ function swap(fn){ panel.classList.add('leaving'); setTimeout(()=>{ fn(); }, 200
 
 function welcome(){
   state = { i:0, scores:{}, first:{} }; ORDER.forEach(k=>state.scores[k]=0);
-  panel.className='panel welcome fadein'+(HERO_LANDING?' has-bg':'');
+  document.body.classList.remove('quiz-mode');
+  document.body.classList.add('welcome-mode');
+  panel.className='panel welcome fadein';
   const chips = ORDER.map(k=>`<span class="style-chip" style="--c:${ARCH[k].color}"><i></i>${ARCH[k].name.replace(/^The /,'')}</span>`).join('');
+  const band = HERO_LANDING
+    ? `<div class="hero-img" style="background-image:url('${HERO_LANDING}')"></div>`
+    : `<div class="hero-img" style="background:linear-gradient(120deg,var(--neh),var(--mar),var(--mary))"></div>`;
   panel.innerHTML = `
-    <div class="aurora"><b class="b1"></b><b class="b2"></b><b class="b3"></b><b class="b4"></b></div>
-    ${HERO_LANDING ? `<div class="bg-hero" style="background-image:url('${HERO_LANDING}')"></div><div class="scrim"></div>` : ``}
-    <div class="eyebrow">\u2726 A Biblical Communication Quiz</div>
-    <h1>
-      <span class="t-line"><span>How do you</span></span>
-      <span class="t-line"><span>handle</span></span>
-      <span class="t-line"><span class="emph">conflict?</span></span>
-    </h1>
-    <p class="tagline">How you respond says more than you think.</p>
-    <div class="styles">${chips}</div>
-    <div class="actions"><button class="btn cta" onclick="swap(start)">Find your style <span class="arr">\u2192</span></button></div>
-    <p class="fine">Six quick scenarios \u00b7 about a minute \u00b7 nothing saved</p>`;
+    <div class="hero-band">${band}<div class="hero-fade"></div></div>
+    <div class="w-content">
+      <div class="eyebrow">\u2726 A Biblical Communication Quiz</div>
+      <h1>
+        <span class="t-line"><span>How do you</span></span>
+        <span class="t-line"><span>handle</span></span>
+        <span class="t-line"><span class="emph">conflict?</span></span>
+      </h1>
+      <p class="tagline">How you respond says more than you think.</p>
+      <div class="styles">${chips}</div>
+      <div class="actions"><button class="btn cta" onclick="swap(start)">Find your style <span class="arr">\u2192</span></button></div>
+      <p class="fine">Six quick scenarios \u00b7 about a minute \u00b7 nothing saved</p>
+    </div>`;
 }
 
 function start(){ state.i=0; render(); }
 
 function render(){
+  document.body.classList.remove('welcome-mode');
+  document.body.classList.add('quiz-mode');
   const q = QUESTIONS[state.i];
-  panel.className='panel fadein';
+  panel.className='panel quiz fadein';
   const pct = (state.i/QUESTIONS.length)*100;
   const opts = q.o.map((o,idx)=>`
     <div class="opt" onclick="choose(${idx})">
@@ -416,6 +432,7 @@ function confetti(){
 }
 
 function forging(){
+  document.body.classList.remove('quiz-mode');
   panel.className='panel fadein';
   panel.innerHTML = `
     <div class="forge">
@@ -431,6 +448,7 @@ function forging(){
 }
 
 function showResult(){
+  document.body.classList.remove('quiz-mode','welcome-mode');
   const key = winner(); const c = ARCH[key];
   panel.className='panel result fadein';
   panel.innerHTML = `
