@@ -68,11 +68,11 @@ h1{font-family:'Lora',serif;font-weight:700;line-height:1.08;color:var(--ink);
 
 /* topbar / progress */
 .topbar{display:flex;justify-content:space-between;align-items:center;font-family:'Inter';font-weight:700;
-  font-size:.82rem;color:var(--brand);margin-bottom:12px}
+  font-size:.82rem;color:var(--brand);margin-bottom:12px;view-transition-name:vt-topbar}
 .topbar .count{color:var(--muted)}
-.bar{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;margin-bottom:22px}
+.bar{height:8px;background:var(--soft);border-radius:99px;overflow:hidden;margin-bottom:22px;view-transition-name:vt-track}
 .bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--brand),var(--mary));
-  transition:width .35s cubic-bezier(.4,0,.2,1)}
+  transition:width .35s cubic-bezier(.4,0,.2,1);view-transition-name:vt-fill}
 
 /* question */
 .qtile{width:96px;height:96px;border-radius:24px;margin:0 auto 6px;display:grid;place-items:center;
@@ -83,8 +83,8 @@ h1{font-family:'Lora',serif;font-weight:700;line-height:1.08;color:var(--ink);
   color:var(--ink);margin:8px 0 22px}
 .opts{display:flex;flex-direction:column;gap:13px;text-align:left}
 .opt{display:flex;align-items:center;gap:14px;background:var(--card);border:1.5px solid var(--line);
-  border-radius:16px;padding:16px 17px;cursor:pointer;transition:transform .12s,border-color .12s,box-shadow .12s;
-  animation:rise .45s both}
+  border-radius:16px;padding:16px 17px;cursor:pointer;transition:transform .12s,border-color .12s,box-shadow .12s}
+.fadein .opt{animation-name:rise;animation-duration:.45s;animation-fill-mode:both}
 .opt:hover{border-color:var(--brand);transform:translateY(-1px);box-shadow:0 12px 24px -16px rgba(90,79,207,.6)}
 .opt:active{transform:scale(.99)}
 .opt:nth-child(1){animation-delay:.04s}.opt:nth-child(2){animation-delay:.1s}
@@ -111,8 +111,7 @@ h1{font-family:'Lora',serif;font-weight:700;line-height:1.08;color:var(--ink);
 
 /* result */
 .result .emblem{width:108px;height:108px;border-radius:50%;margin:0 auto;display:grid;place-items:center;
-  font-size:54px;background:var(--soft);box-shadow:inset 0 0 0 2px var(--line);
-  animation:revealPop .7s cubic-bezier(.2,.8,.3,1.3) both}
+  font-size:54px;background:var(--soft);box-shadow:inset 0 0 0 2px var(--line)}
 .result .verdict{font-family:'Inter';font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   font-size:.72rem;color:var(--muted);margin-top:18px}
 .result .piece-name{font-family:'Lora',serif;font-weight:700;font-size:clamp(1.9rem,6.4vw,2.5rem);line-height:1.08;margin-top:4px}
@@ -126,9 +125,9 @@ h1{font-family:'Lora',serif;font-weight:700;line-height:1.08;color:var(--ink);
 .verse{font-family:'Lora',serif;font-style:italic;color:var(--ink);font-size:1.08rem;line-height:1.45}
 .verse cite{display:block;font-style:normal;font-family:'Inter';font-weight:700;font-size:.74rem;
   letter-spacing:.06em;text-transform:uppercase;color:var(--brand);margin-top:8px}
-.result .emblem,.result .verdict,.result .piece-name,.result .piece-title,.result .traits,
-.result .block,.result .actions,.result .growth-divider,.result .weak-card{animation:riseIn .5s both}
-.result .emblem{animation:revealPop .7s cubic-bezier(.2,.8,.3,1.3) both}
+.fadein.result .emblem,.fadein.result .verdict,.fadein.result .piece-name,.fadein.result .piece-title,.fadein.result .traits,
+.fadein.result .block,.fadein.result .actions,.fadein.result .growth-divider,.fadein.result .weak-card{animation:riseIn .5s both}
+.fadein.result .emblem{animation:revealPop .7s cubic-bezier(.2,.8,.3,1.3) both}
 @keyframes revealPop{0%{opacity:0;transform:scale(.4)}60%{opacity:1;transform:scale(1.12)}100%{transform:scale(1)}}
 @keyframes riseIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 
@@ -239,6 +238,19 @@ body.quiz-mode .footnote{display:none}
 .swipe-cue .swipe-label{font-family:'Inter',sans-serif;font-weight:700;letter-spacing:.04em;font-size:clamp(.86rem,2svh,.95rem);color:var(--brand)}
 .swipe-cue:focus-visible{outline:2px solid var(--brand);outline-offset:6px;border-radius:12px}
 @keyframes chevBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+
+/* ===== refined page transitions — View Transitions API (no libraries) ===== */
+@media (prefers-reduced-motion: no-preference){
+  /* the whole screen cross-dissolves with a gentle forward drift */
+  ::view-transition-old(root){animation:vtOut .55s cubic-bezier(.4,0,.2,1) both}
+  ::view-transition-new(root){animation:vtIn .8s cubic-bezier(.25,.8,.35,1) .06s both}
+  /* persistent chrome morphs in place instead of fading */
+  ::view-transition-group(vt-topbar),
+  ::view-transition-group(vt-track){animation-duration:.64s;animation-timing-function:cubic-bezier(.25,.8,.35,1)}
+  ::view-transition-group(vt-fill){animation-duration:.72s;animation-timing-function:cubic-bezier(.25,.8,.35,1)}
+}
+@keyframes vtOut{to{opacity:0;transform:translateY(-10px) scale(.992)}}
+@keyframes vtIn{from{opacity:0;transform:translateY(14px) scale(.994)}}
 </style>
 </head>
 <body>
@@ -346,7 +358,20 @@ let state = { i:0, scores:{}, first:{} };
 ORDER.forEach(k=>state.scores[k]=0);
 const panel = document.getElementById('panel');
 
-function swap(fn){ panel.classList.add('leaving'); setTimeout(()=>{ fn(); }, 200); }
+function prefersReduced(){ return !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); }
+let inVT = false;
+function swap(fn){
+  if(prefersReduced()){ inVT=false; fn(); return; }          // accessibility: instant swap
+  if(document.startViewTransition){                           // modern: overlapping cross-dissolve
+    inVT = true;
+    const t = document.startViewTransition(()=>{ fn(); });
+    t.finished.finally(()=>{ inVT=false; });
+    return;
+  }
+  inVT = false;                                               // legacy fallback: original fade
+  panel.classList.add('leaving');
+  setTimeout(()=>{ fn(); }, 200);
+}
 
 let entering=false;
 function welcome(){
@@ -354,7 +379,7 @@ function welcome(){
   entering=false;
   document.body.classList.remove('quiz-mode');
   document.body.classList.add('welcome-mode');
-  panel.className='panel welcome fadein';
+  panel.className='panel welcome'+(inVT?'':' fadein');
   const chips = ORDER.map(k=>`<span class="style-chip" style="--c:${ARCH[k].color}"><i></i>${ARCH[k].name.replace(/^The /,'')}</span>`).join('');
   const band = HERO_LANDING
     ? `<div class="hero-img" style="background-image:url('${HERO_LANDING}')"></div>`
@@ -441,7 +466,7 @@ function render(){
   document.body.classList.remove('welcome-mode');
   document.body.classList.add('quiz-mode');
   const q = QUESTIONS[state.i];
-  panel.className='panel quiz fadein';
+  panel.className='panel quiz'+(inVT?'':' fadein');
   const pct = (state.i/QUESTIONS.length)*100;
   const opts = q.o.map((o,idx)=>`
     <div class="opt" onclick="choose(${idx})">
@@ -503,7 +528,7 @@ function confetti(){
 
 function forging(){
   document.body.classList.remove('quiz-mode');
-  panel.className='panel fadein';
+  panel.className='panel'+(inVT?'':' fadein');
   panel.innerHTML = `
     <div class="forge">
       <div class="forge-ring"></div>
@@ -520,7 +545,7 @@ function forging(){
 function showResult(){
   document.body.classList.remove('quiz-mode','welcome-mode');
   const key = winner(); const c = ARCH[key];
-  panel.className='panel result fadein';
+  panel.className='panel result'+(inVT?'':' fadein');
   panel.innerHTML = `
     <div class="emblem" style="box-shadow:inset 0 0 0 2px ${c.color}33, 0 18px 34px -16px ${c.color}88">${c.icon}</div>
     <div class="verdict" style="animation-delay:.12s">You handle conflict like</div>
