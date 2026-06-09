@@ -164,7 +164,7 @@ h1{font-family:'Lora',serif;font-weight:700;line-height:1.08;color:var(--ink);
 body.welcome-mode{padding:0}
 body.welcome-mode .wrap{max-width:none;width:100%;margin:0}
 body.welcome-mode .footnote{display:none}
-.panel.welcome{border-radius:0;box-shadow:none;padding:0;height:100svh;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
+.panel.welcome{border-radius:0;box-shadow:none;padding:0;height:100svh;touch-action:none;display:flex;flex-direction:column;background:var(--bg);overflow:hidden}
 .panel.welcome::after{z-index:3}
 .welcome .hero-band{position:relative;flex:0 1 auto;min-height:0;width:100%;height:clamp(140px,29svh,360px);overflow:hidden}
 .welcome .hero-img{position:absolute;inset:0;background-size:cover;background-position:center 32%;animation:heroIn 1.2s cubic-bezier(.2,.8,.3,1) both}
@@ -231,6 +231,14 @@ body.quiz-mode .footnote{display:none}
 .panel.quiz .opt{flex:1 1 0;min-height:0;max-height:clamp(58px,11.5svh,94px);padding:clamp(7px,1.3svh,15px) 14px}
 .panel.quiz .optk{flex:none;width:clamp(27px,4.4svh,34px);height:clamp(27px,4.4svh,34px);font-size:clamp(.8rem,1.9svh,.95rem)}
 .panel.quiz .optt{font-size:clamp(.82rem,1.9svh,1rem);line-height:1.28}
+/* ===== swipe-up to enter ===== */
+.w-stage{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;height:100%;touch-action:none;will-change:transform}
+.swipe-cue{display:inline-flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;margin-top:clamp(14px,2.6svh,28px);animation:riseIn .6s 1.4s both}
+.swipe-cue .chev{display:block;color:var(--brand);animation:chevBounce 1.8s ease-in-out infinite}
+.swipe-cue .chev svg{display:block;width:clamp(28px,3.6svh,34px);height:clamp(28px,3.6svh,34px)}
+.swipe-cue .swipe-label{font-family:'Inter',sans-serif;font-weight:700;letter-spacing:.04em;font-size:clamp(.86rem,2svh,.95rem);color:var(--brand)}
+.swipe-cue:focus-visible{outline:2px solid var(--brand);outline-offset:6px;border-radius:12px}
+@keyframes chevBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 </style>
 </head>
 <body>
@@ -302,35 +310,35 @@ const HERO_Q5 = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBAUE
 
 const QUESTIONS = [
   { q:"A church committee meeting is running an hour over — people keep chatting and nothing's getting decided. You…", tile:"⏰", photo:HERO_Q1,
-    o:[ {t:"Politely cut in, restate the goals, and push for a vote so everyone can leave", a:"nehemiah"},
-        {t:"Say nothing — quietly help pass out snacks and clear cups to keep things pleasant", a:"barnabas"},
-        {t:"Quietly fume that the leader ignored the printed agenda, and mentally check out", a:"martha"},
-        {t:"Watch everyone's body language, working out why the group can't connect — but keep it to yourself", a:"mary"} ]},
+    o:[ {t:"Cut in, restate the goal, push for a vote", a:"nehemiah"},
+        {t:"Say nothing — just help keep things pleasant", a:"barnabas"},
+        {t:"Silently fume that they ignored the agenda", a:"martha"},
+        {t:"Read the room quietly, but keep it to yourself", a:"mary"} ]},
   { q:"Someone in your small group makes a theological claim you're sure is wrong. You…", tile:"💬", photo:HERO_Q2,
-    o:[ {t:"Speak up and correct them on the spot, so the misinformation doesn't spread", a:"nehemiah"},
-        {t:"Stay quiet to keep the peace — you don't want them to feel embarrassed", a:"barnabas"},
-        {t:"Switch to study mode — look up the exact verse or commentary to verify first", a:"martha"},
-        {t:"Wonder why they see it that way, and maybe offer a gentle, private word later", a:"mary"} ]},
+    o:[ {t:"Correct them on the spot before it spreads", a:"nehemiah"},
+        {t:"Stay quiet to keep the peace and spare them", a:"barnabas"},
+        {t:"Look up the exact verse to check first", a:"martha"},
+        {t:"Wonder why they think that — a quiet word later", a:"mary"} ]},
   { q:"You hear through the grapevine that a church friend is upset over something you said. You…", tile:"📱", photo:HERO_Q3,
-    o:[ {t:"Call or text them right away to find out what's wrong and fix it now", a:"nehemiah"},
-        {t:"Feel sick about it and worry about losing the friendship, hoping it blows over", a:"barnabas"},
-        {t:"Replay the whole conversation, analysing your words to see if you broke a rule", a:"martha"},
-        {t:"Withdraw for a few days to pray and process, then approach them when it's quiet", a:"mary"} ]},
+    o:[ {t:"Message them right away to sort it out now", a:"nehemiah"},
+        {t:"Feel sick about it and hope it blows over", a:"barnabas"},
+        {t:"Replay it all, checking if you broke a rule", a:"martha"},
+        {t:"Withdraw to pray and process, then approach later", a:"mary"} ]},
   { q:"When a conflict gets heated, your biggest temptation is to…", tile:"🔥", photo:HERO_Q4,
-    o:[ {t:"Overpower them with logic or intensity until you win the argument", a:"nehemiah"},
-        {t:"Agree to things you don't believe just to make the shouting stop", a:"barnabas"},
-        {t:"Go cold and a little passive-aggressive, picking at their logical flaws", a:"martha"},
-        {t:"Shut down, pull away, and emotionally detach from the whole thing", a:"mary"} ]},
+    o:[ {t:"Overpower them until you win the argument", a:"nehemiah"},
+        {t:"Cave and agree just to stop the conflict", a:"barnabas"},
+        {t:"Go cold and pick at their logical flaws", a:"martha"},
+        {t:"Shut down and emotionally detach", a:"mary"} ]},
   { q:"At small group, the chat slides into gossip about someone who isn't there — and it's turning unkind. You…", tile:"🗣️", photo:HERO_Q5,
-    o:[ {t:"Cut in directly — call it what it is and steer the group somewhere kinder", a:"nehemiah"},
-        {t:"Gently change the subject so nobody's embarrassed and the warmth comes back", a:"barnabas"},
-        {t:"Point out that it isn't fair to judge someone who isn't here to speak for themselves", a:"martha"},
-        {t:"Stay quiet but uneasy, and resolve to check on that person yourself later", a:"mary"} ]},
+    o:[ {t:"Cut in — name it and steer things kinder", a:"nehemiah"},
+        {t:"Gently change the subject to keep the peace", a:"barnabas"},
+        {t:"Say it's unfair to judge someone who's absent", a:"martha"},
+        {t:"Stay quiet, then check on them privately later", a:"mary"} ]},
   { q:"You're already stretched thin, and someone at church asks you to take on one more big commitment. You…", tile:"✋", photo:HERO_Q6,
-    o:[ {t:"Tell them straight you're at capacity and can't take this one on", a:"nehemiah"},
-        {t:"Say yes anyway — you can't stand the thought of letting them down", a:"barnabas"},
-        {t:"Lay out everything already on your plate to explain why it isn't reasonable", a:"martha"},
-        {t:"Go quiet and avoid them while you work out how to say no without the guilt", a:"mary"} ]},
+    o:[ {t:"Tell them straight — you're at capacity", a:"nehemiah"},
+        {t:"Say yes anyway — you can't let them down", a:"barnabas"},
+        {t:"List all you're juggling to justify a no", a:"martha"},
+        {t:"Go quiet and dodge them, unsure how to say no", a:"mary"} ]},
 ];
 
 const KEYS = ["A","B","C","D"];
@@ -340,8 +348,10 @@ const panel = document.getElementById('panel');
 
 function swap(fn){ panel.classList.add('leaving'); setTimeout(()=>{ fn(); }, 200); }
 
+let entering=false;
 function welcome(){
   state = { i:0, scores:{}, first:{} }; ORDER.forEach(k=>state.scores[k]=0);
+  entering=false;
   document.body.classList.remove('quiz-mode');
   document.body.classList.add('welcome-mode');
   panel.className='panel welcome fadein';
@@ -350,24 +360,84 @@ function welcome(){
     ? `<div class="hero-img" style="background-image:url('${HERO_LANDING}')"></div>`
     : `<div class="hero-img" style="background:linear-gradient(120deg,var(--neh),var(--mar),var(--mary))"></div>`;
   panel.innerHTML = `
-    <div class="hero-band">${band}<div class="hero-fade"></div></div>
-    <div class="w-content">
-      <div class="eyebrow">\u2726 A Biblical Communication Quiz</div>
-      <h1>
-        <span class="t-line"><span>How do you</span></span>
-        <span class="t-line"><span>handle</span></span>
-        <span class="t-line"><span class="emph">conflict?</span></span>
-      </h1>
-      <p class="tagline">How you respond says more than you think.</p>
-      <div class="styles">${chips}</div>
-      <div class="actions"><button class="btn cta" onclick="swap(start)">Find your style <span class="arr">\u2192</span></button></div>
-      <p class="fine">Six quick scenarios \u00b7 about a minute \u00b7 nothing saved</p>
+    <div class="w-stage" id="wStage">
+      <div class="hero-band">${band}<div class="hero-fade"></div></div>
+      <div class="w-content">
+        <div class="eyebrow">\u2726 A Biblical Communication Quiz</div>
+        <h1>
+          <span class="t-line"><span>How do you</span></span>
+          <span class="t-line"><span>handle</span></span>
+          <span class="t-line"><span class="emph">conflict?</span></span>
+        </h1>
+        <p class="tagline">How you respond says more than you think.</p>
+        <div class="styles">${chips}</div>
+        <div class="swipe-cue" id="swipeCue" role="button" tabindex="0" aria-label="Swipe up to begin">
+          <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></span>
+          <span class="swipe-label">Swipe up to begin</span>
+        </div>
+        <p class="fine">Six quick scenarios \u00b7 about a minute \u00b7 nothing saved</p>
+      </div>
     </div>`;
+  setupWelcomeSwipe();
+}
+
+function enterQuiz(){
+  if(entering) return; entering=true;
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const stage = document.getElementById('wStage');
+  const go=()=>{ entering=false; start(); };
+  if(reduce || !stage){ go(); return; }
+  const offset = window.innerHeight + 60;
+  stage.style.transition='transform .44s cubic-bezier(.32,.9,.32,1), opacity .4s ease';
+  stage.style.transform=`translateY(${-offset}px) scale(.95)`;
+  stage.style.opacity='0';
+  let fired=false; const once=()=>{ if(fired) return; fired=true; go(); };
+  stage.addEventListener('transitionend', once, {once:true});
+  setTimeout(once, 560);
+}
+
+function setupWelcomeSwipe(){
+  const stage = document.getElementById('wStage');
+  const cue = document.getElementById('swipeCue');
+  if(cue) cue.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); enterQuiz(); }});
+  if(!stage) return;
+  const reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce) return;
+  const H=()=>window.innerHeight;
+  let startY=0, dy=0, dragging=false, lastY=0, lastT=0, vel=0, moved=false, onCue=false;
+  stage.addEventListener('pointerdown', e=>{
+    if(e.pointerType==='mouse' && e.button!==0) return;
+    dragging=true; moved=false; onCue=!!(cue&&cue.contains(e.target));
+    startY=e.clientY; lastY=e.clientY; lastT=performance.now(); dy=0; vel=0;
+    stage.style.transition='none';
+    try{ stage.setPointerCapture(e.pointerId); }catch(_){}
+  });
+  stage.addEventListener('pointermove', e=>{
+    if(!dragging) return;
+    let delta=startY-e.clientY; if(delta<0) delta*=0.3; dy=delta;
+    if(Math.abs(delta)>6) moved=true;
+    const now=performance.now(), dt=now-lastT; if(dt>0) vel=(lastY-e.clientY)/dt;
+    lastY=e.clientY; lastT=now;
+    const prog=Math.max(0,Math.min(1,dy/H()));
+    stage.style.transform=`translateY(${-dy}px) scale(${1-prog*0.05})`;
+    stage.style.opacity=`${1-prog*0.3}`;
+    if(cue) cue.style.opacity=`${Math.max(0,1-prog*1.4)}`;
+  });
+  const end=e=>{
+    if(!dragging) return; dragging=false;
+    try{ stage.releasePointerCapture(e.pointerId); }catch(_){}
+    if(dy>H()*0.3 || vel>0.6){ enterQuiz(); }
+    else if(!moved && onCue){ enterQuiz(); }
+    else { stage.style.transition='transform .5s cubic-bezier(.2,.9,.25,1.05), opacity .4s ease'; stage.style.transform=''; stage.style.opacity=''; if(cue) cue.style.opacity=''; }
+  };
+  stage.addEventListener('pointerup', end);
+  stage.addEventListener('pointercancel', end);
 }
 
 function start(){ state.i=0; render(); }
 
 function render(){
+  panel.style.cssText='';
   document.body.classList.remove('welcome-mode');
   document.body.classList.add('quiz-mode');
   const q = QUESTIONS[state.i];
